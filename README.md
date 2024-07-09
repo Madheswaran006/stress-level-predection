@@ -35,7 +35,7 @@ This project is a web application that predicts stress levels based on various i
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/stress-level-prediction.git
+   https://github.com/venky-1710/stress-level-predection.git
    ```
 2. Install the required dependencies:
    ```sh
