@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from flask import Flask, render_template, request, Response, jsonify
-import cv2, random
+from flask import Flask, render_template, Response, jsonify
+import cv2, random, os
 
 app = Flask(__name__, template_folder='templates')
 
@@ -26,16 +26,22 @@ tree_clf = DecisionTreeClassifier(max_depth=7, random_state=100)
 tree_clf.fit(X_train, y_train)
 
 # ----------------------------
-# Camera setup
+# Camera setup (Render-safe)
 # ----------------------------
 camera = cv2.VideoCapture(0)
+if not camera.isOpened():
+    camera = None
 
 def generate_frames():
     while True:
-        success, frame = camera.read()
-        if not success:
-            # Send a blank frame if camera fails
-            frame = np.zeros((480,640,3), dtype=np.uint8)
+        if camera is None:
+            # No camera available (Render environment)
+            frame = np.zeros((480, 640, 3), dtype=np.uint8)
+        else:
+            success, frame = camera.read()
+            if not success:
+                frame = np.zeros((480, 640, 3), dtype=np.uint8)
+
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
@@ -47,27 +53,21 @@ def camera_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # ----------------------------
-# Simulated Stress Analysis
+# Stress Analysis
 # ----------------------------
 @app.route('/analyze', methods=['GET'])
 def analyze():
-    ret, frame = camera.read()
-    if not ret:
-        return jsonify({"stress_level": "Camera Error"})
-
-    # Simulate stress detection (random result for demo)
+    # For now: simulate result
     result = random.choice(["Low Stress", "Moderate Stress", "High Stress"])
     return jsonify({"stress_level": result})
 
 # ----------------------------
-# Login route shows camera UI
+# Main page
 # ----------------------------
 @app.route('/')
-def login():
-    return render_template('login.html')
+def home():
+    return render_template('login.html')  # or index.html
 
-# ----------------------------
-# Run app
-# ----------------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
+
