@@ -8,79 +8,80 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-      min-height: 100vh;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #333;
+      min-height: 100vh;
     }
 
     .container {
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0px 8px 25px rgba(0,0,0,0.15);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 40px 30px;
+      border-radius: 18px;
+      width: 90%;
       max-width: 950px;
-      width: 100%;
+      box-shadow: 0px 12px 35px rgba(0, 0, 0, 0.3);
       text-align: center;
       transition: background 0.5s ease;
     }
 
     h1 {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: #fff;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
     }
 
-    .camera-section {
-      margin: 20px 0;
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 25px;
     }
 
     .camera-section img {
       width: 100%;
       max-width: 600px;
-      border-radius: 12px;
-      border: 4px solid #eee;
+      border-radius: 14px;
+      border: 4px solid #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     button {
       background: #222;
       border: none;
-      padding: 12px 24px;
+      padding: 14px 28px;
       font-size: 1rem;
       color: white;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      margin-top: 15px;
-      transition: 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     button:hover {
       background: #444;
+      transform: scale(1.05);
     }
 
     .result-box {
       margin-top: 20px;
       padding: 15px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
       font-weight: bold;
       font-size: 1.2rem;
-      color: #fff;
+      backdrop-filter: blur(6px);
     }
 
-    /* Progress Bar */
     .progress-bar {
       height: 25px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.3);
-      margin: 10px 0;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 12px 0;
       overflow: hidden;
-      position: relative;
     }
 
     .progress {
@@ -89,37 +90,36 @@
       color: #fff;
       font-weight: bold;
       line-height: 25px;
+      transition: width 0.4s ease-in-out;
     }
 
-    /* History Table */
     table {
       width: 100%;
       margin-top: 20px;
       border-collapse: collapse;
       font-size: 0.95rem;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
       overflow: hidden;
+      backdrop-filter: blur(5px);
     }
 
     th, td {
       padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       text-align: center;
-      color: #fff;
     }
 
     th {
-      background: rgba(0,0,0,0.3);
-      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
     }
 
     tr:hover {
-      background-color: rgba(255,255,255,0.15);
+      background-color: rgba(255, 255, 255, 0.18);
     }
 
     .emoji {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
     }
   </style>
 </head>
@@ -133,13 +133,13 @@
     </div>
 
     <!-- Analyze Button -->
-    <button onclick="analyzeStress()">Analyze Stress Level</button>
+    <button onclick="analyzeStress()">Check Stress</button>
 
     <!-- Result -->
     <div id="result" class="result-box" style="display:none;"></div>
     
     <!-- History Table -->
-    <h2 style="margin-top:25px; color:white;">History</h2>
+    <h2>History</h2>
     <table id="historyTable">
       <thead>
         <tr>
@@ -171,23 +171,21 @@
             progressColor = "#4CAF50";
             width = 30;
             emoji = "😊";
-            bgColor = "linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)"; // greenish
+            bgColor = "linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)";
           } else if (stressLevel === "Moderate Stress") {
             progressColor = "#FFC107";
             width = 65;
             emoji = "😟";
-            bgColor = "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)"; // yellow/orange
+            bgColor = "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)";
           } else if (stressLevel === "High Stress") {
             progressColor = "#F44336";
             width = 100;
             emoji = "😫";
-            bgColor = "linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%)"; // red
+            bgColor = "linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%)";
           }
 
-          // Change container background
           document.getElementById("mainContainer").style.background = bgColor;
 
-          // Show main result
           document.getElementById("result").style.display = "block";
           document.getElementById("result").innerHTML = `
             Predicted Stress Level: <strong>${stressLevel}</strong> ${emoji}
@@ -198,7 +196,6 @@
             </div>
           `;
 
-          // Add to History Table
           const tableBody = document.querySelector("#historyTable tbody");
           const newRow = document.createElement("tr");
           newRow.innerHTML = `
