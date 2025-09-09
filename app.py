@@ -9,7 +9,7 @@ import cv2, random
 app = Flask(__name__, template_folder='templates')
 
 # ----------------------------
-# Load dataset & train model (still here if you want to use form later)
+# Load dataset & train model
 # ----------------------------
 data = pd.read_csv("StressLevelDataset.csv")
 encoder = LabelEncoder()
@@ -34,12 +34,12 @@ def generate_frames():
     while True:
         success, frame = camera.read()
         if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            # Send a blank frame if camera fails
+            frame = np.zeros((480,640,3), dtype=np.uint8)
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/camera_feed')
 def camera_feed():
@@ -55,12 +55,12 @@ def analyze():
     if not ret:
         return jsonify({"stress_level": "Camera Error"})
 
-    # 👉 Simulate stress detection (random result for demo)
-    result = random.choice(["Low Stress", "Medium Stress", "High Stress"])
+    # Simulate stress detection (random result for demo)
+    result = random.choice(["Low Stress", "Moderate Stress", "High Stress"])
     return jsonify({"stress_level": result})
 
 # ----------------------------
-# Login route now shows camera UI
+# Login route shows camera UI
 # ----------------------------
 @app.route('/')
 def login():
