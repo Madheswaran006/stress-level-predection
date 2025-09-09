@@ -1,80 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
-    <script>
-        function validateForm() {
-            var inputs = document.getElementsByTagName('input');
-            for (var i = 0; i < inputs.length; i++) {
-                var input = inputs[i];
-                if (input.type === 'number') {
-                    if (!input.value || isNaN(input.value)) {
-                        alert('Please enter a valid number for all fields.');
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-    </script>
+  <meta charset="UTF-8">
+  <title>Stress Level Detection</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    body {
+      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+
+    .container {
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0px 8px 25px rgba(0,0,0,0.15);
+      max-width: 950px;
+      width: 100%;
+      text-align: center;
+      transition: background 0.5s ease;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .camera-section {
+      margin: 20px 0;
+    }
+
+    .camera-section img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      border: 4px solid #eee;
+    }
+
+    button {
+      background: #222;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 25px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.3);
+      margin: 10px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress {
+      height: 100%;
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+      line-height: 25px;
+    }
+
+    /* History Table */
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      text-align: center;
+      color: #fff;
+    }
+
+    th {
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+    }
+
+    tr:hover {
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    .emoji {
+      font-size: 1.3rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2 align="center">Stress Level Predection</h2>
-        <form action="/" method="post" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="anxiety_level" class="form-label">Anxiety Level (0-20):</label>
-                <input type="number" class="form-control" id="anxiety_level" name="anxiety_level" min="0" max="20" required>
-            </div>
-            <div class="form-group">
-                <label for="mental_health_history" class="form-label">Mental Health History (0-5):</label>
-                <input type="number" class="form-control" id="mental_health_history" name="mental_health_history" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="depression" class="form-label">Depression (0-25):</label>
-                <input type="number" class="form-control" id="depression" name="depression" min="0" max="25" required>
-            </div>
-            <div class="form-group">
-                <label for="headache" class="form-label">Headache (0-7):</label>
-                <input type="number" class="form-control" id="headache" name="headache" min="0" max="7" required>
-            </div>
-            <div class="form-group">
-                <label for="sleep_quality" class="form-label">Sleep Quality (0-7):</label>
-                <input type="number" class="form-control" id="sleep_quality" name="sleep_quality" min="0" max="7" required>
-            </div>
-            <div class="form-group">
-                <label for="breathing_problem" class="form-label">Breathing Problem (0-5):</label>
-                <input type="number" class="form-control" id="breathing_problem" name="breathing_problem" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="living_conditions" class="form-label">Living Conditions (0-5):</label>
-                <input type="number" class="form-control" id="living_conditions" name="living_conditions" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="academic_performance" class="form-label">Academic Performance (0-5):</label>
-                <input type="number" class="form-control" id="academic_performance" name="academic_performance" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="study_load" class="form-label">Study Load (0-5):</label>
-                <input type="number" class="form-control" id="study_load" name="study_load" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="future_career_concerns" class="form-label">Future Career Concerns (0-5):</label>
-                <input type="number" class="form-control" id="future_career_concerns" name="future_career_concerns" min="0" max="5" required>
-            </div>
-            <div class="form-group">
-                <label for="extracurricular_activities" class="form-label">Extracurricular Activities (0-5):</label>
-                <input type="number" class="form-control" id="extracurricular_activities" name="extracurricular_activities" min="0" max="5" required>
-            </div>
-            <div class="center-button">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
+  <div class="container" id="mainContainer">
+    <h1>Stress Level Detection</h1>
+
+    <!-- Camera Feed -->
+    <div class="camera-section">
+      <img src="{{ url_for('camera_feed') }}" alt="Camera Feed">
     </div>
+
+    <!-- Analyze Button -->
+    <button onclick="analyzeStress()">Analyze Stress Level</button>
+
+    <!-- Result -->
+    <div id="result" class="result-box" style="display:none;"></div>
+    
+    <!-- History Table -->
+    <h2 style="margin-top:25px; color:white;">History</h2>
+    <table id="historyTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Stress Level</th>
+          <th>Status Bar</th>
+          <th>Emoji</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    let count = 0;
+
+    function analyzeStress() {
+      fetch("/analyze")
+        .then(response => response.json())
+        .then(data => {
+          count++;
+          const stressLevel = data.stress_level;
+          let progressColor = "";
+          let width = 0;
+          let emoji = "😐";
+          let bgColor = "";
+
+          if (stressLevel === "Low Stress") {
+            progressColor = "#4CAF50";
+            width = 30;
+            emoji = "😊";
+            bgColor = "linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)"; // greenish
+          } else if (stressLevel === "Moderate Stress") {
+            progressColor = "#FFC107";
+            width = 65;
+            emoji = "😟";
+            bgColor = "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)"; // yellow/orange
+          } else if (stressLevel === "High Stress") {
+            progressColor = "#F44336";
+            width = 100;
+            emoji = "😫";
+            bgColor = "linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%)"; // red
+          }
+
+          // Change container background
+          document.getElementById("mainContainer").style.background = bgColor;
+
+          // Show main result
+          document.getElementById("result").style.display = "block";
+          document.getElementById("result").innerHTML = `
+            Predicted Stress Level: <strong>${stressLevel}</strong> ${emoji}
+            <div class="progress-bar">
+              <div class="progress" style="width:${width}%; background:${progressColor};">
+                ${stressLevel}
+              </div>
+            </div>
+          `;
+
+          // Add to History Table
+          const tableBody = document.querySelector("#historyTable tbody");
+          const newRow = document.createElement("tr");
+          newRow.innerHTML = `
+            <td>${count}</td>
+            <td>${stressLevel}</td>
+            <td>
+              <div class="progress-bar">
+                <div class="progress" style="width:${width}%; background:${progressColor};"></div>
+              </div>
+            </td>
+            <td class="emoji">${emoji}</td>
+          `;
+          tableBody.appendChild(newRow);
+        })
+        .catch(error => {
+          alert("Error analyzing stress: " + error);
+        });
+    }
+  </script>
 </body>
 </html>
